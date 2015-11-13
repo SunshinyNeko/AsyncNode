@@ -3,69 +3,22 @@
 //-----------------------------------
 
 'use strict'
-// import * as net from 'net';
-// const net = require('net');
-import * as net from 'net';
 
-module Network {
-  const Socket = net.Socket;
+import * as net from 'net';
+export type Socket = net.Socket;
+
+export module AsyncNet {
   
-  type Socket = net.Socket;
-  export declare type ConnectOptions = { 
-    port: number, 
-    host: string, 
-    path?: string, 
-    localAddress?: string, 
-    localPort?: number, 
-    family?: number, 
-    lookup?: Function 
-  };
-  
-  Socket.prototype.createConnectionAsync = async function(options: ConnectOptions): Promise<Socket> {
-    return await this.connectAsync(options);
-  }
-  
-  Socket.prototype.createConnectionAsync = async function(port: number, host: string): Promise<Socket> {
-    return await this.connectAsync(port, host);
-  }
-  
-  Socket.prototype.createConnectionAsync = async function(path: string): Promise<Socket> {
-    return await this.connectAsync({ path });
-  }
-  
-  Socket.prototype.connectAsync = async function(port: number, host: string): Promise<Socket> {
-    return await this.connectAsync({ port, host });
-  }
-  
-  Socket.prototype.connectAsync = async function(path: string): Promise<Socket> {
-    return await this.connectAsync({ path });
-  }
-  
-  Socket.prototype.connectAsync = async function(options: ConnectOptions): Promise<Socket> {
-    return new Promise<Socket>(resolve => {
-      let socket = this.connect(options, () => {
+  export async function connectAsync(port, host): Promise<Socket> {
+    return new Promise<Socket>((resolve, reject) => {
+      let socket = net.connect(port, host, () => {
+        socket.removeListener('error', errorHandler);
         resolve(socket);
       });
+      
+      var errorHandler = (err: Error) => reject(socket);
+      socket.once('error', errorHandler);
     });
   }
   
-  Socket.prototype.writeAsync = async function(data: Buffer): Promise<boolean> {
-    return await this.writeAsync(data, 'binary');
-  }
-  
-  Socket.prototype.writeAsync = async function(data, encoding): Promise<boolean> {
-    return new Promise<boolean>(resolve => {
-      let flushed = this.write(data, encoding, () => {
-        resolve(flushed);
-      });
-    });
-  }
-  
-  Socket.prototype.onceAsync = async function(): Promise<Buffer> {
-    return new Promise<Buffer>(resolve => {
-      this.once('data', (data) => {
-        resolve(data);
-      });
-    });
-  }
 }
