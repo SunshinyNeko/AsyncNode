@@ -1,0 +1,26 @@
+{
+  "name": "async-node",
+  "version": "0.0.1",
+  "description": "Async wrapper for Node.js 4.0+",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SunshinyNeko/AsyncNode.git"
+  },
+  "keywords": [
+    "async",
+    "await"
+  ],
+  "author": "猫王子",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/SunshinyNeko/AsyncNode/issues"
+  },
+  "homepage": "https://github.com/SunshinyNeko/AsyncNode#readme",
+  "devDependencies": {
+    "mocha": "^2.3.3"
+  }
+}
