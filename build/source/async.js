@@ -15,39 +15,43 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
         step("next", void 0);
     });
 };
+// --------------------------------- net ---------------------------------
 var net = require('net');
-;
-const Socket = net.Socket;
-// export net.Socket extends
-Socket.prototype.connectAsync = function () {
-    return __awaiter(this, void 0, Promise, function* () {
+net.Socket.prototype.connectAsync = function () {
+    return __awaiter(this, arguments, Promise, function* (_arguments) {
+        let _this = this;
+        let socketArgs = Array.from(_arguments);
         return new Promise((resolve, reject) => {
-            let errorHandler = (error) => reject(null);
-            let socket = this.connect(arguments[0], arguments[1], () => {
+            let errorHandler = (error) => reject(false);
+            let finishHandler = () => {
                 socket.removeListener('error', errorHandler);
-                resolve(socket);
-            });
+                resolve(true);
+            };
+            let args = socketArgs.concat(finishHandler);
+            var socket = net.Socket.prototype.connect.apply(_this, args);
             socket.once('error', errorHandler);
         });
     });
 };
-Socket.prototype.writeAsync = function () {
+net.Socket.prototype.writeAsync = function () {
     return __awaiter(this, arguments, Promise, function* (_arguments) {
         let _this = this;
         let socketArgs = Array.from(_arguments);
         return new Promise(resolve => {
-            let writeFinished = () => resolve(flushed);
-            let args = socketArgs.concat(writeFinished);
-            var flushed = Socket.prototype.write.apply(_this, args);
+            let finishHandler = () => resolve(flushed);
+            let args = socketArgs.concat(finishHandler);
+            var flushed = net.Socket.prototype.write.apply(_this, args);
         });
     });
 };
-Socket.prototype.onceAsync = function () {
+net.Socket.prototype.readAsync = function () {
     return __awaiter(this, void 0, Promise, function* () {
+        let _this = this;
+        let socketArgs = ['data'];
         return new Promise(resolve => {
-            this.once('data', (data) => {
-                resolve(data);
-            });
+            let dataHandler = (data) => resolve(data);
+            let args = socketArgs.concat(dataHandler);
+            net.Socket.prototype.once.apply(_this, args);
         });
     });
 };
