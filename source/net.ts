@@ -49,8 +49,8 @@ module Network {
     });
   }
   
-  Socket.prototype.writeAsync = async function(data): Promise<boolean> {
-    return await this.writeAsync(data, 'utf8');
+  Socket.prototype.writeAsync = async function(data: Buffer): Promise<boolean> {
+    return await this.writeAsync(data, 'binary');
   }
   
   Socket.prototype.writeAsync = async function(data, encoding): Promise<boolean> {
