@@ -47,10 +47,9 @@ net.Socket.prototype.writeAsync = function () {
 net.Socket.prototype.readAsync = function () {
     return __awaiter(this, void 0, Promise, function* () {
         let _this = this;
-        let socketArgs = ['data'];
         return new Promise(resolve => {
             let dataHandler = (data) => resolve(data);
-            let args = socketArgs.concat(dataHandler);
+            let args = ['data', dataHandler];
             net.Socket.prototype.once.apply(_this, args);
         });
     });

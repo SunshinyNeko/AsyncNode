@@ -48,11 +48,9 @@ net.Socket.prototype.writeAsync = async function() {
 
 net.Socket.prototype.readAsync = async function(): Promise<Buffer> {
   let _this = this;
-  let socketArgs: any[] = ['data'];
-  
   return new Promise<Buffer>(resolve => {
     let dataHandler = (data: Buffer) => resolve(data);
-    let args = socketArgs.concat(dataHandler);
+    let args = ['data', dataHandler];
     net.Socket.prototype.once.apply(_this, args);
   });
 }

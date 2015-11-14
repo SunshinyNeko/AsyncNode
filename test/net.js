@@ -12,8 +12,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
         step("next", void 0);
     });
 };
-require('../source/async');
 var net = require('net');
+require('../async-node');
 // let socket = net.connect(80, 'echo.jpillora.com', async () => {
 //   let write = await socket.writeAsync(new Buffer('GET / HTTP 1.0'));
 //   console.log('write completed ' + write);
@@ -24,16 +24,17 @@ var net = require('net');
 // socket.on('error', (err) => console.log(err));
 function h() {
     return __awaiter(this, void 0, Promise, function* () {
-        console.log('Hahaha');
         let socket2 = new net.Socket();
         socket2.on('error', (err) => console.log(err));
         socket2.on('close', () => console.log('close'));
-        let bc = yield socket2.connectAsync(80, 'ip.cn');
-        console.log('connect: ' + bc);
-        yield socket2.writeAsync(new Buffer('GET / HTTP 0.9'));
-        yield socket2.writeAsync(new Buffer('\n'));
+        let bc = yield socket2.connectAsync(3002, 'localhost');
+        console.log(yield socket2.writeAsync(new Buffer('GET / HTTP 1.0\n', 'utf8')));
         let buf = yield socket2.readAsync();
         console.log(buf.toString('utf8'));
+        yield socket2.writeAsync(new Buffer('balabala\n', 'utf8'));
+        buf = yield socket2.readAsync();
+        console.log(buf.toString('utf8'));
+        socket2.end();
     });
 }
 h();
