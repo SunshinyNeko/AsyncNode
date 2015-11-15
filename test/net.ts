@@ -30,12 +30,13 @@ async function h() {
   for (let i = 0; i < 100000; i++) {
     let mem = process.memoryUsage();
     Object.getOwnPropertyNames(mem).forEach(n => mem[n] = mem[n] / 1024 / 1024);
-    let msg = JSON.stringify(process.memoryUsage());
+    let msg = JSON.stringify(mem);
     await socket2.writeAsync(new Buffer(msg));
     let buf = await socket2.readAsync();
     console.log(i + ' ' + buf.toString('utf8'));
-    await delay(20);  
   }
+  
+  await delay(20 * 1000);  
   // console.log();
   // let buf = await socket2.readAsync();
   // console.log(buf.toString('utf8'));
