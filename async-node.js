@@ -21,8 +21,8 @@ net.Socket.prototype.connectAsync = function () {
     return __awaiter(this, arguments, Promise, function* (_arguments) {
         let _this = this;
         let socketArgs = Array.from(_arguments);
-        return new Promise((resolve, reject) => {
-            let errorHandler = (error) => reject(false);
+        return new Promise(resolve => {
+            let errorHandler = (error) => resolve(false);
             let finishHandler = () => {
                 socket.removeListener('error', errorHandler);
                 resolve(true);
@@ -38,6 +38,7 @@ net.Socket.prototype.writeAsync = function () {
         let _this = this;
         let socketArgs = Array.from(_arguments);
         return new Promise(resolve => {
+            console.log('xx');
             let finishHandler = () => resolve(flushed);
             let args = socketArgs.concat(finishHandler);
             var flushed = net.Socket.prototype.write.apply(_this, args);
@@ -47,10 +48,15 @@ net.Socket.prototype.writeAsync = function () {
 net.Socket.prototype.readAsync = function () {
     return __awaiter(this, void 0, Promise, function* () {
         let _this = this;
-        return new Promise(resolve => {
-            let dataHandler = (data) => resolve(data);
+        return new Promise((resolve, reject) => {
+            let errorHandler = (err) => reject(null);
+            let dataHandler = (data) => {
+                _this.removeListener('error', errorHandler);
+                resolve(data);
+            };
             let args = ['data', dataHandler];
             net.Socket.prototype.once.apply(_this, args);
+            _this.once('data', errorHandler);
         });
     });
 };

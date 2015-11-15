@@ -28,13 +28,31 @@ function h() {
         socket2.on('error', (err) => console.log(err));
         socket2.on('close', () => console.log('close'));
         let bc = yield socket2.connectAsync(3002, 'localhost');
-        console.log(yield socket2.writeAsync(new Buffer('GET / HTTP 1.0\n', 'utf8')));
-        let buf = yield socket2.readAsync();
-        console.log(buf.toString('utf8'));
-        yield socket2.writeAsync(new Buffer('balabala\n', 'utf8'));
-        buf = yield socket2.readAsync();
-        console.log(buf.toString('utf8'));
+        console.log('connect: ' + bc);
+        function delay(time) {
+            return __awaiter(this, void 0, Promise, function* () {
+                return new Promise(resolve => {
+                    setTimeout(resolve, time);
+                });
+            });
+        }
+        for (let i = 0; i < 100000; i++) {
+            let mem = process.memoryUsage();
+            Object.getOwnPropertyNames(mem).forEach(n => mem[n] = mem[n] / 1024 / 1024);
+            let msg = JSON.stringify(process.memoryUsage());
+            yield socket2.writeAsync(new Buffer(msg));
+            let buf = yield socket2.readAsync();
+            console.log(i + ' ' + buf.toString('utf8'));
+            yield delay(20);
+        }
+        // console.log();
+        // let buf = await socket2.readAsync();
+        // console.log(buf.toString('utf8'));
+        // await socket2.writeAsync(new Buffer('balabala\n', 'utf8'));
+        // buf = await socket2.readAsync();
+        // console.log(buf.toString('utf8'));
         socket2.end();
     });
 }
 h();
+process.title = 'async test';
