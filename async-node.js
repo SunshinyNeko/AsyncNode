@@ -29,7 +29,7 @@ net.Socket.prototype.connectAsync = function () {
             };
             let args = socketArgs.concat(finishHandler);
             var socket = net.Socket.prototype.connect.apply(_this, args);
-            socket.once('error', errorHandler);
+            socket.on('error', errorHandler);
         });
     });
 };
@@ -56,7 +56,7 @@ net.Socket.prototype.readAsync = function () {
             };
             let args = ['data', dataHandler];
             net.Socket.prototype.once.apply(_this, args);
-            _this.once('data', errorHandler);
+            _this.on('data', errorHandler);
         });
     });
 };
