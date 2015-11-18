@@ -38,7 +38,6 @@ net.Socket.prototype.writeAsync = function () {
         let _this = this;
         let socketArgs = Array.from(_arguments);
         return new Promise(resolve => {
-            console.log('xx');
             let finishHandler = () => resolve(flushed);
             let args = socketArgs.concat(finishHandler);
             var flushed = net.Socket.prototype.write.apply(_this, args);
